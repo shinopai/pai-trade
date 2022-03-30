@@ -55,6 +55,8 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        $user->load('product_users', 'products');
+
         return view('user.profiles.show', compact('user'));
     }
 

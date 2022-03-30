@@ -52,4 +52,8 @@ class Product extends Model
     public function primary_category(){
         return $this->belongsTo(PrimaryCategory::class);
     }
+
+    public function product_users(){
+        return $this->hasMany(ProductUser::class);
+    }
 }

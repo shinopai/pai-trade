@@ -37811,9 +37811,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+(axios__WEBPACK_IMPORTED_MODULE_2___default().defaults.headers.common) = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   setup: function setup() {
-    console.log(product); // get current user
+    var likes = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)();
+    var ifLikes = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(Boolean);
+    var currentUserId = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(); // get current user
 
     var getCurrentUser = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -37823,7 +37829,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/user').then(function (res) {
-                  console.log(res.data);
+                  checkIfLikes(res.data, product.id);
+                  currentUserId.value = res.data;
                 })["catch"](function (err) {
                   console.log(err.response.data.message);
                 });
@@ -37839,17 +37846,139 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return function getCurrentUser() {
         return _ref.apply(this, arguments);
       };
+    }(); // get number of likes this product
+
+
+    var getLikes = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/likes/products/' + product.id).then(function (res) {
+                  likes.value = res.data;
+                })["catch"](function (err) {
+                  console.log(err.response.data.message);
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      return function getLikes() {
+        return _ref2.apply(this, arguments);
+      };
+    }(); // check if current user likes this product
+
+
+    var checkIfLikes = /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(userId, productId) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/likes/users/' + userId + '/products/' + productId).then(function (res) {
+                  if (res.data === '') {
+                    ifLikes.value = false;
+                  } else {
+                    ifLikes.value = true;
+                  }
+                })["catch"](function (err) {
+                  console.log(err.response.data.message);
+                });
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      return function checkIfLikes(_x, _x2) {
+        return _ref3.apply(this, arguments);
+      };
     }();
 
     (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)(function () {
       getCurrentUser();
-    }); // // like product
-    // const addLike = async () => {
-    //   await Axios.post('/api/likes/add')
-    // }
+      getLikes();
+    }); // like product
+
+    var addLike = /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(userId) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/likes/add', {
+                  user_id: userId,
+                  product_id: product.id
+                }).then(function (res) {
+                  getCurrentUser();
+                  getLikes();
+                })["catch"](function (err) {
+                  console.log(err.response.data.message);
+                });
+
+              case 2:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+
+      return function addLike(_x3) {
+        return _ref4.apply(this, arguments);
+      };
+    }(); // like product
+
+
+    var removeLike = /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(userId) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/likes/delete', {
+                  user_id: userId,
+                  product_id: product.id
+                }).then(function (res) {
+                  getCurrentUser();
+                  getLikes();
+                })["catch"](function (err) {
+                  console.log(err.response.data.message);
+                });
+
+              case 2:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }));
+
+      return function removeLike(_x4) {
+        return _ref5.apply(this, arguments);
+      };
+    }();
 
     return {
-      product: product
+      product: product,
+      likes: likes,
+      currentUserId: currentUserId,
+      ifLikes: ifLikes,
+      addLike: addLike,
+      removeLike: removeLike
     };
   }
 });
@@ -37869,13 +37998,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  "class": "ml-2"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_fa = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("fa");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_fa, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [$setup.ifLikes ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_fa, {
+    key: 0,
     icon: "heart",
-    "class": "mt-3 text-xl"
-  });
+    "class": "mt-3 text-xl cursor-pointer text-red-500",
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return $setup.removeLike($setup.currentUserId);
+    })
+  })) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_fa, {
+    key: 1,
+    icon: "heart",
+    "class": "mt-3 text-xl cursor-pointer",
+    onClick: _cache[1] || (_cache[1] = function ($event) {
+      return $setup.addLike($setup.currentUserId);
+    })
+  })), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.likes), 1
+  /* TEXT */
+  )]);
 }
 
 /***/ }),

@@ -8,9 +8,9 @@
                             <h3 class="text-2xl">{{ $user->name }}</h3> <span>{{ $user->email }}</span>
                         </div>
                         <div class="flex justify-center items-center p-3 bg-gray-200 rounded-lg">
-                            <div class="mr-3"> <span class="text-gray-400 block">出品数</span> <span class="font-bold text-black text-xl">34</span> </div>
-                            <div class="mr-3"> <span class="text-gray-400 block">お気に入り</span> <span class="font-bold text-black text-xl">940</span> </div>
-                            <div> <span class="text-gray-400 block">フォロワー</span> <span class="font-bold text-black text-xl">8.9</span> </div>
+                            <div class="mr-3"> <span class="text-gray-400 block">出品数</span> <span class="font-bold text-black text-xl">{{ $user->products->count() }}</span> </div>
+                            <div class="mr-3"> <span class="text-gray-400 block">お気に入り</span> <span class="font-bold text-black text-xl">{{ $user->product_users->count() }}</span> </div>
+                            <div> <span class="text-gray-400 block">フォロワー</span> <span class="font-bold text-black text-xl">0</span> </div>
                         </div>
                     </div>
                 </div>

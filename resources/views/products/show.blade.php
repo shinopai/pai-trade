@@ -1,5 +1,4 @@
 <x-app-layout>
-    <!-- component -->
     <div class="py-20 h-screen">
         <div class="flex w-2/3 mx-auto justify-center rounded-lg overflow-hidden h-56">
             <div class="w-1/3 bg-cover" style="background-image: url({{ asset('/images/product.png') }})">
